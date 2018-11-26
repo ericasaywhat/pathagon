@@ -15,11 +15,15 @@ public class Player {
         isMyTurn = turn;
     }
 
-    public void placeTile() {
+    public Tile makeMove() {
+        // TODO poll user for coordinates
+        // then form new tile with coordinates and color
+        // then return tile
         if (tilesRemaining == 0) {
             // TODO fill in
         } else {
             tilesRemaining--;
         }
+        return null;
     }
 }
