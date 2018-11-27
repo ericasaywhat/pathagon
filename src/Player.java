@@ -11,6 +11,14 @@ public class Player {
         return isMyTurn;
     }
 
+    public int getTilesRemaining() {
+        return tilesRemaining;
+    }
+
+    public void setTilesRemaining(int tilesRemaining) {
+        this.tilesRemaining = tilesRemaining;
+    }
+
     public void setIsMyTurn(boolean turn) {
         isMyTurn = turn;
     }
