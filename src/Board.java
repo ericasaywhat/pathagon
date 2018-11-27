@@ -13,11 +13,38 @@ public class Board {
 
     public void placeTile(Tile tile) {
         board[tile.getX()][tile.getY()] = tile;
-        // TODO update neighbors of current tile and surrounding tiles
+        if (tile.getX()+1 < 7 && board[tile.getX()+1][tile.getY()] != null) {
+            board[tile.getX()+1][tile.getY()].setLeftNeighbor(tile);
+            tile.setRightNeighbor(board[tile.getX()+1][tile.getY()]);
+        }
+        if (tile.getX()-1 > 0 && board[tile.getX()-1][tile.getY()] != null) {
+            board[tile.getX()-1][tile.getY()].setRightNeighbor(tile);
+            tile.setLeftNeighbor(board[tile.getX()-1][tile.getY()]);
+        }
+        if (tile.getY()+1 < 7 && board[tile.getX()][tile.getY()+1] != null) {
+            board[tile.getX()][tile.getY()+1].setBottomNeighbor(tile);
+            tile.setTopNeighbor(board[tile.getX()][tile.getY()+1]);
+        }
+        if (tile.getY()-1 > 0 && board[tile.getX()][tile.getY()-1] != null) {
+            board[tile.getX()][tile.getY()-1].setTopNeighbor(tile);
+            tile.setBottomNeighbor(board[tile.getX()][tile.getY()-1]);
+        }
     }
 
     public void removeTile(Tile tile) {
-        //TODO wipe tile from neighbors
+        board[tile.getX()][tile.getY()] = tile;
+        if (tile.getX()+1 < 7 && board[tile.getX()+1][tile.getY()] != null) {
+            board[tile.getX()+1][tile.getY()].setLeftNeighbor(null);
+        }
+        if (tile.getX()-1 > 0 && board[tile.getX()-1][tile.getY()] != null) {
+            board[tile.getX()-1][tile.getY()].setRightNeighbor(null);
+        }
+        if (tile.getY()+1 < 7 && board[tile.getX()][tile.getY()+1] != null) {
+            board[tile.getX()][tile.getY()+1].setBottomNeighbor(null);
+        }
+        if (tile.getY()-1 > 0 && board[tile.getX()][tile.getY()-1] != null) {
+            board[tile.getX()][tile.getY()-1].setTopNeighbor(null);
+        }
     }
 
     public int isPathMade() {
