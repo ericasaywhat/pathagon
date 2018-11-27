@@ -29,8 +29,14 @@ public class Game {
         // TODO if so, return tile to appropriate player, empty the spot, and clear neighbors
     }
 
-    public void checkIsGameOver() {
-        // TODO ask the board if game is over lol
+    public boolean checkIsGameOver() {
+        int result = board.isPathMade();
+        if (result != -1) {
+            String winner = (result == 0) ? "1" : "2";
+            System.out.println("Congratulations, Player " + winner + "!");
+            return true;
+        }
+        return false;
     }
 
     public void switchCurrentPlayer() {
