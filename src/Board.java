@@ -21,8 +21,6 @@ public class Board {
     }
 
     public int isPathMade() {
-        // TODO check for path from (0,0) to (0,7) or (0,0) to (7,0)
-        // For any tile on either edge, see if neighbors reach other end
         boolean didWhiteWin = false;
         boolean didBlackWin = false;
 
