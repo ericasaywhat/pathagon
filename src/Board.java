@@ -64,6 +64,8 @@ public class Board {
     }
 
     public boolean checkTileForPath(Tile tile, ArrayList<Tile> visited, int goalX, int goalY, int color) {
+        boolean flag;
+
         if (tile == null) {
             return false;
         } else {
@@ -76,25 +78,37 @@ public class Board {
             if (tile.getLeftNeighbor() != null
                     && !visited.contains(tile.getLeftNeighbor())
                     && tile.getLeftNeighbor().getColor() == color) {
-                checkTileForPath(tile.getLeftNeighbor(), visited, goalX, goalY, color);
+                flag = checkTileForPath(tile.getLeftNeighbor(), visited, goalX, goalY, color);
+                if (flag) {
+                    return true;
+                }
             }
 
             if (tile.getRightNeighbor() != null
                     && !visited.contains(tile.getRightNeighbor())
                     && tile.getRightNeighbor().getColor() == color) {
-                checkTileForPath(tile.getRightNeighbor(), visited, goalX, goalY, color);
+                flag = checkTileForPath(tile.getRightNeighbor(), visited, goalX, goalY, color);
+                if (flag) {
+                    return true;
+                }
             }
 
             if (tile.getTopNeighbor() != null
                     && !visited.contains(tile.getTopNeighbor())
                     && tile.getTopNeighbor().getColor() == color) {
-                checkTileForPath(tile.getTopNeighbor(), visited, goalX, goalY, color);
+                flag = checkTileForPath(tile.getTopNeighbor(), visited, goalX, goalY, color);
+                if (flag) {
+                    return true;
+                }
             }
 
             if (tile.getBottomNeighbor() != null
                     && !visited.contains(tile.getBottomNeighbor())
                     && tile.getBottomNeighbor().getColor() == color) {
-                checkTileForPath(tile.getBottomNeighbor(), visited, goalX, goalY, color);
+                flag = checkTileForPath(tile.getBottomNeighbor(), visited, goalX, goalY, color);
+                if (flag) {
+                    return true;
+                }
             }
 
             return false;
@@ -132,7 +146,9 @@ public class Board {
 
     public String toString() {
         String s = "";
+        s += "  0 0 0 0 0 0 0\n";
         for (int i = 6; i >= 0; i--) { // print top-down
+            s += "1 ";
             for (int j = 0; j < 7; j++) {
                 if (board[i][j] == null) {
                     s += "_ ";
@@ -141,10 +157,11 @@ public class Board {
                 }
 
                 if (j == 6) {
-                    s += "\n";
+                    s += "1\n";
                 }
             }
         }
+        s += "  0 0 0 0 0 0 0\n";
         return s;
     }
 

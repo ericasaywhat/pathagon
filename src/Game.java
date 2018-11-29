@@ -25,7 +25,6 @@ public class Game {
             isGameOver = checkIsGameOver();
             switchCurrentPlayer();
         }
-        System.out.println("Game over!");
     }
 
     /**
@@ -79,7 +78,7 @@ public class Game {
         int result = board.isPathMade();
         if (result != -1) {
             String winner = (result == 0) ? "1" : "2";
-            System.out.println("Congratulations, Player " + winner + "!");
+            System.out.println("Congratulations, Player " + winner + "! You've won!");
             return true;
         }
         return false;

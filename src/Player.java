@@ -66,8 +66,8 @@ public class Player {
                 "Note that if your coordinates are invalid, you will be asked again.");
         String[] str_coordinates = scanner.next().split(",");
         int[] coordinates = new int[2];
-        coordinates[0] = Integer.valueOf(str_coordinates[0]);
-        coordinates[1] = Integer.valueOf(str_coordinates[1]);
+        coordinates[1] = Integer.valueOf(str_coordinates[0])-1;
+        coordinates[0] = Integer.valueOf(str_coordinates[1])-1;
         return coordinates;
     }
 
