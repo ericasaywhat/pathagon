@@ -54,7 +54,11 @@ public class Board {
         for (int i = 0; i < 7; i++) {
             didWhiteWin = checkTileForPath(board[0][i], new ArrayList<Tile>(), 6, -6, 0);
             didBlackWin = checkTileForPath(board[i][0], new ArrayList<Tile>(), -6, 6, 1);
-            return (didWhiteWin) ? 0 : 1;
+            if (didWhiteWin == true) {
+                return 0;
+            } else if (didBlackWin == true) {
+                return 1;
+            }
         }
         return -1;
     }
@@ -100,6 +104,10 @@ public class Board {
     // TODO cover case where player can't put a removed piece back in its previous position
     // TODO also check if these are the only conditions with invalid coordinates
     public boolean areValidCoordinates(int[] coordinates) {
+        if (coordinates == null) {
+            return false;
+        }
+
         int x = coordinates[0];
         int y = coordinates[1];
         if (x < 0 || x > 6 || y < 0 || y > 6) {

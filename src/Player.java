@@ -4,10 +4,12 @@ import java.util.Arrays;
 public class Player {
     private boolean isMyTurn;
     private int tilesRemaining;
+    private int color;
 
-    public Player() {
+    public Player(int color) {
         isMyTurn = false;
         tilesRemaining = 14;
+        this.color = color;
     }
 
     public boolean getIsMyTurn() {
@@ -26,6 +28,10 @@ public class Player {
         isMyTurn = turn;
     }
 
+    public int getColor() {
+        return this.color;
+    }
+
     public Tile makeMove(Board currentBoard, int userColor) { // TODO call with these args
         if (tilesRemaining == 0) {
             return null;
@@ -33,7 +39,7 @@ public class Player {
             tilesRemaining--;
         }
 
-        int[] coordinates = new int[2];
+        int[] coordinates = null;
         while (!areValidCoordinates(coordinates, currentBoard)) {
             coordinates = pollForCoordinates();
         }

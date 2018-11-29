@@ -9,8 +9,8 @@ public class Game {
 
     public Game() {
         board = new Board();
-        player1 = new Player();
-        player2 = new Player();
+        player1 = new Player(0);
+        player2 = new Player(1);
         currentPlayer = player1;
         otherPlayer = player2;
         isGameOver = false;
@@ -18,10 +18,10 @@ public class Game {
 
     public void play() {
         while (!isGameOver) {
-            Tile tile = currentPlayer.makeMove();
+            Tile tile = currentPlayer.makeMove(board, currentPlayer.getColor());
             board.placeTile(tile);
             checkForTrap(tile);
-            checkIsGameOver();
+            isGameOver = checkIsGameOver();
             switchCurrentPlayer();
         }
         System.out.println("Game over!");
@@ -44,25 +44,25 @@ public class Game {
         int colour = tile.getColor();
         Tile[][] gameBoard = board.getBoard();
 
-        if (gameBoard[x][y+1] != null && (gameBoard[x][y+1].getColor() != colour)) {
+        if (y+1 < 7 && gameBoard[x][y+1] != null && (gameBoard[x][y+1].getColor() != colour)) {
             if (gameBoard[x][y+2] != null && (gameBoard[x][y+2].getColor() == colour)) {
                 board.removeTile(tile);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
-        if (gameBoard[x][y-1] != null && gameBoard[x][y-1].getColor() != colour) {
+        if (y-1 >= 0 && gameBoard[x][y-1] != null && gameBoard[x][y-1].getColor() != colour) {
             if (gameBoard[x][y-2] != null && (gameBoard[x][y-2].getColor() == colour)) {
                 board.removeTile(tile);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
-        if (gameBoard[x+1][y] != null && gameBoard[x+1][y].getColor() != colour) {
+        if (x+1 < 7 && gameBoard[x+1][y] != null && gameBoard[x+1][y].getColor() != colour) {
             if (gameBoard[x+2][y] != null && (gameBoard[x+2][y].getColor() == colour)) {
                 board.removeTile(tile);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
-        if (gameBoard[x-1][y] != null && gameBoard[x-1][y].getColor() != colour) {
+        if (x-1 >= 0 && gameBoard[x-1][y] != null && gameBoard[x-1][y].getColor() != colour) {
             if (gameBoard[x-2][y] != null && (gameBoard[x-2][y].getColor() == colour)) {
                 board.removeTile(tile);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
@@ -86,6 +86,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-
+        Game game = new Game();
+        game.play();
     }
 }
