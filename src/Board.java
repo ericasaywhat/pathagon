@@ -97,6 +97,21 @@ public class Board {
         }
     }
 
+    // TODO cover case where player can't put a removed piece back in its previous position
+    // TODO also check if these are the only conditions with invalid coordinates
+    public boolean areValidCoordinates(int[] coordinates) {
+        int x = coordinates[0];
+        int y = coordinates[1];
+        if (x < 0 || x > 6 || y < 0 || y > 6) {
+            return false;
+        } else if (board[x][y] != null) {
+            return false;
+        } else {
+            System.out.println("Great! These are valid coordinates.");
+            return true;
+        }
+    }
+
     public String toString() {
         String s = "";
         for (int i = 6; i >= 0; i--) { // print top-down

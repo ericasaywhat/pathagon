@@ -27,19 +27,18 @@ public class Game {
         System.out.println("Game over!");
     }
 
+    /**
+     * This function checks the last move to see if it has trapped any
+     * of the other player's pieces. If there is a trap, the tile is
+     * removed from the board and the other player's number of
+     * remaining tiles is incremented.
+     *
+     * The following conditions qualify for a trap:
+     *      - there must be a neighbor of opposite colour
+     *      - there must be a neighbor two blocks down of
+     *        the same colour
+     * **/
     public void checkForTrap(Tile tile) {
-        /**
-         * This function checks the last move to see if it has trapped any
-         * of the other player's pieces. If there is a trap, the tile is
-         * removed from the board and the other player's number of
-         * remaining tiles is incremented.
-         *
-         * The following conditions qualify for a trap:
-         *      - there must be a neighbor of opposite colour
-         *      - there must be a neighbor two blocks down of
-         *        the same colour
-         * **/
-        
         int x = tile.getX();
         int y = tile.getY();
         int colour = tile.getColor();

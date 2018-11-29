@@ -15,6 +15,16 @@ public class Tile {
         this.bottomNeighbor = null;
     }
 
+    public Tile(int color, int x, int y) {
+        this.color = color;
+        this.leftNeighbor = null;
+        this.rightNeighbor = null;
+        this.topNeighbor = null;
+        this.bottomNeighbor = null;
+        this.x = x;
+        this.y = y;
+    }
+
     public void setCoordinates(int x, int y) {
         this.x = x;
         this.y = y;
