@@ -32,7 +32,7 @@ public class Board {
     }
 
     public void removeTile(Tile tile) {
-        board[tile.getX()][tile.getY()] = tile;
+        board[tile.getX()][tile.getY()] = null;
         if (tile.getX()+1 < 7 && board[tile.getX()+1][tile.getY()] != null) {
             board[tile.getX()+1][tile.getY()].setLeftNeighbor(null);
         }
@@ -103,16 +103,26 @@ public class Board {
 
     // TODO cover case where player can't put a removed piece back in its previous position
     // TODO also check if these are the only conditions with invalid coordinates
-    public boolean areValidCoordinates(int[] coordinates) {
+    public boolean areValidCoordinates(int[] coordinates, ArrayList<Tile> forbiddenTiles) {
         if (coordinates == null) {
             return false;
         }
 
         int x = coordinates[0];
         int y = coordinates[1];
+
+        for (Tile t : forbiddenTiles) {
+            if (t.getX() == x && t.getY() == y) {
+                System.out.println("Not a valid coordinate");
+                return false;
+            }
+        }
+
         if (x < 0 || x > 6 || y < 0 || y > 6) {
+            System.out.println("Not a valid coordinate");
             return false;
         } else if (board[x][y] != null) {
+            System.out.println("Not a valid coordinate");
             return false;
         } else {
             System.out.println("Great! These are valid coordinates.");

@@ -21,6 +21,7 @@ public class Game {
             Tile tile = currentPlayer.makeMove(board, currentPlayer.getColor());
             board.placeTile(tile);
             checkForTrap(tile);
+            System.out.println(board.toString());
             isGameOver = checkIsGameOver();
             switchCurrentPlayer();
         }
@@ -46,25 +47,29 @@ public class Game {
 
         if (y+1 < 7 && gameBoard[x][y+1] != null && (gameBoard[x][y+1].getColor() != colour)) {
             if (gameBoard[x][y+2] != null && (gameBoard[x][y+2].getColor() == colour)) {
-                board.removeTile(tile);
+                otherPlayer.addForbiddenTile(gameBoard[x][y+1]);
+                board.removeTile(gameBoard[x][y+1]);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
         if (y-1 >= 0 && gameBoard[x][y-1] != null && gameBoard[x][y-1].getColor() != colour) {
             if (gameBoard[x][y-2] != null && (gameBoard[x][y-2].getColor() == colour)) {
-                board.removeTile(tile);
+                otherPlayer.addForbiddenTile(gameBoard[x][y-1]);
+                board.removeTile(gameBoard[x][y-1]);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
         if (x+1 < 7 && gameBoard[x+1][y] != null && gameBoard[x+1][y].getColor() != colour) {
             if (gameBoard[x+2][y] != null && (gameBoard[x+2][y].getColor() == colour)) {
-                board.removeTile(tile);
+                otherPlayer.addForbiddenTile(gameBoard[x+1][y]);
+                board.removeTile(gameBoard[x+1][y]);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
         if (x-1 >= 0 && gameBoard[x-1][y] != null && gameBoard[x-1][y].getColor() != colour) {
             if (gameBoard[x-2][y] != null && (gameBoard[x-2][y].getColor() == colour)) {
-                board.removeTile(tile);
+                otherPlayer.addForbiddenTile(gameBoard[x-1][y]);
+                board.removeTile(gameBoard[x-1][y]);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
