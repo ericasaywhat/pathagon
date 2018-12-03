@@ -81,6 +81,12 @@ public class Game {
             System.out.println("Congratulations, Player " + winner + "! You've won!");
             return true;
         }
+
+        if (player1.getTilesRemaining() == 0 || player2.getTilesRemaining() == 0) {
+            System.out.println("It's a draw! Players have run out of tiles.");
+            return true;
+        }
+        
         return false;
     }
 
