@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class Board {
     private Tile[][] board;
+    private Tile lastPlayerTilePlaced;
 
     public Board() {
         board = new Tile[7][7];
@@ -9,6 +10,14 @@ public class Board {
 
     public Tile[][] getBoard() {
         return board;
+    }
+
+    public Tile getLastPlayerTilePlaced() {
+        return lastPlayerTilePlaced;
+    }
+
+    public void setLastPlayerTilePlaced(Tile lastPlayerTilePlaced) {
+        this.lastPlayerTilePlaced = lastPlayerTilePlaced;
     }
 
     public void placeTile(Tile tile) {

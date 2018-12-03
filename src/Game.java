@@ -18,10 +18,12 @@ public class Game {
 
     public void play() {
         while (!isGameOver) {
+            // if ai then pass in gameboard
             Tile tile = currentPlayer.makeMove(board, currentPlayer.getColor());
             board.placeTile(tile);
             checkForTrap(tile);
             System.out.println(board.toString());
+            board.setLastPlayerTilePlaced(tile);
             isGameOver = checkIsGameOver();
             switchCurrentPlayer();
         }
