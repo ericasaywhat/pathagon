@@ -7,6 +7,19 @@ public class Game {
     private int numberOfTurns;
     private boolean isGameOver;
 
+    /*
+     *  This code is a game of Pathagon. In which
+     *  we have one player, player1, and one AI,
+     *  player2that uses Minimax and Alpha-Beta pruning
+     *  to generate game trees to make moves.
+     *
+     *  The player/user plays black (0) and
+     *  AI is white (1).
+     *
+     *  Black plays from bottom edge to top edge
+     *  White plays from left edge to right edge
+     * **/
+
     public Game() {
         board = new Board();
         player1 = new Player(0);
@@ -29,7 +42,7 @@ public class Game {
         }
     }
 
-    /**
+    /*
      * This function checks the last move to see if it has trapped any
      * of the other player's pieces. If there is a trap, the tile is
      * removed from the board and the other player's number of
@@ -39,7 +52,7 @@ public class Game {
      *      - there must be a neighbor of opposite colour
      *      - there must be a neighbor two blocks down of
      *        the same colour
-     * **/
+     * */
     public void checkForTrap(Tile tile) {
         int x = tile.getX();
         int y = tile.getY();
