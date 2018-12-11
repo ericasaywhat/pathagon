@@ -39,6 +39,10 @@ public class Node {
         this.value = value;
     }
 
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
     public int getDepth() {
         return depth;
     }

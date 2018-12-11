@@ -10,9 +10,27 @@ public class AIPlayer extends Player {
         super(1);
     }
 
-    // TODO print trees
+    public void printTree(Node node) {
+        int h = node.getDepth();
+        int i;
+        for (i=1; i<=h; i++)
+            printGivenLevel(node, i);
+    }
 
-    // function that returns all the next steps of the other player
+    private void printGivenLevel (Node node ,int level)
+    {
+        if (node == null)
+            return;
+        if (level == 1)
+            System.out.print(node.getValue() + " ");
+        else if (level > 1)
+        {
+            for(Node child : node.getChildren()) {
+                printGivenLevel(child, child.getDepth());
+            }
+        }
+    }
+
 
     /*
      *  This is a function that returns all the next steps
@@ -21,7 +39,7 @@ public class AIPlayer extends Player {
      *  be touching.
      *
      * */
-    private ArrayList<Node> nextTier(Board board, Node aiMove) {
+    private ArrayList<Node> nextPlayerTier(Board board, Node aiMove) {
         Tile tile = board.getLastPlayerTilePlaced();
         int x = tile.getX();
         int y = tile.getY();
@@ -30,8 +48,10 @@ public class AIPlayer extends Player {
         ArrayList<Node> nextTier = new ArrayList<>();
 
         if (y + 1 < 7 && gameBoard[x][y + 1] == null) {
-            nextTier.add(new Node(aiMove, aiMove.getDepth() + 1,
-                    new int[]{x, y + 1}, false));
+            Node newPlayerNode = new Node(aiMove, aiMove.getDepth() + 1,
+                    new int[]{x, y + 1}, false);
+            nextTier.add(newPlayerNode);
+
         }
         if (y - 1 >= 0 && gameBoard[x][y - 1] == null) {
             nextTier.add(new Node(aiMove, aiMove.getDepth() + 1,
@@ -49,63 +69,116 @@ public class AIPlayer extends Player {
         return nextTier;
     }
 
+    private ArrayList<Node> nextAITier(Board board, Node aiMove, Node playerMove) {
+        int x = aiMove.getCoords()[0];
+        int y = aiMove.getCoords()[1];
+        Tile tile = new Tile(1, x, y);
 
-    private Node evaluationHelper(Board board, Node node) {
-        //TODO insert board logic in here
-//        Tile tile = currentPlayer.makeMove(board, currentPlayer.getColor());
-//        board.placeTile(tile);
-//        checkForTrap(tile);
-//        System.out.println(board.toString());
-//        board.setLastPlayerTilePlaced(tile);
-//        isGameOver = checkIsGameOver();
-//        switchCurrentPlayer();
-        //TODO check if max or min and get max and min of nodes accordingly
-        if (this.getTilesRemaining() == 0) {
-            return node;
+        Tile[][] gameBoard = board.getBoard();
+
+        ArrayList<Node> nextTier = new ArrayList<>();
+
+        if (y + 1 < 7 && gameBoard[x][y + 1] == null) {
+            nextTier.add(new Node(playerMove, playerMove.getDepth() + 1,
+                    new int[]{x, y + 1}, true));
         }
-        // get all possible AI moves
-        // return either max or min depending on which node
+        if (y - 1 >= 0 && gameBoard[x][y - 1] == null) {
+            nextTier.add(new Node(playerMove, playerMove.getDepth() + 1,
+                    new int[]{x, y - 1}, true));
+        }
+        if (x + 1 < 7 && gameBoard[x + 1][y] != null) {
+            nextTier.add(new Node(playerMove, playerMove.getDepth() + 1,
+                    new int[]{x + 1, y}, true));
+        }
+        if (x - 1 >= 0 && gameBoard[x - 1][y] != null) {
+            nextTier.add(new Node(playerMove, playerMove.getDepth() + 1,
+                    new int[]{x - 1, y}, true));
+        }
+
+        return nextTier;
     }
 
-    private void evaluation() {
+    private Node evaluationHelper(Board board, Node node, Player otherPlayer) {
+        if (this.getTilesRemaining() == 0 || board.isPathMade() != -1) {
+            return node;
+        }
+
+        Tile tile = new Tile(1, node.getCoords()[0], node.getCoords()[1]);
+        board.placeTile(tile);
+        board.checkForTrap(tile, otherPlayer);
+        int result = board.findLongestPath();
+        if (board.isPathMade() == 0) {
+            node.setValue(-10000);
+        } else if (board.isPathMade() == 1) {
+            node.setValue(10000);
+        } else {
+            int value = board.findLongestPath();
+            node.setValue(value);
+
+        }
+
+        node.setChildren(nextPlayerTier(board, node));
+
+        for (Node child : node.getChildren()) {
+            ArrayList<Node> grandchildren = nextAITier(board, node, child);
+            child.setChildren(grandchildren);
+            evaluationHelper(board, child, otherPlayer);
+            int minValueSoFar = 10000;
+            for (Node grandchild : grandchildren) {
+                if (grandchild.getValue() < minValueSoFar) {
+                    minValueSoFar = grandchild.getValue();
+                }
+            }
+            child.setValue(minValueSoFar);
+        }
+
+        int maxValueSoFar = -10000;
+        for (Node child : node.getChildren()) {
+            if (child.getValue() > maxValueSoFar) {
+                maxValueSoFar = child.getValue();
+            }
+        }
+        node.setValue(maxValueSoFar);
+
+        return node;
+    }
+
+    private void evaluation(Player otherPlayer) {
         //TODO accomodate for player going first
         currentTurn = new Node(null, 0, null, true);
         currentTurn.setValue(0);
         for (int y = 0; y < 7; y++) {
-            Node root = evaluationHelper(new Board(), new Node(null, 0,
-                    new int[]{0, y}, true)); // generate a new board for each starter
+            Node root = evaluationHelper(new Board(), new Node(null, 0, new int[]{0, y}, true), otherPlayer); // generate a new board for each starter
             if (root.getValue() > currentTurn.getValue()) {
                 currentTurn = root;
+                tree = root;
             }
         }
     }
 
-
-    //Base cases:
-    //      Someone wins
-    //      No next move; stalemate/draw
-    //Evaluation of game state:
-    //      If AI wins, evaluated value should be bigger than some positive value
-    //      If AI loses, then it should have a value lower than some negative value
-    //      If there is a draw, it should have a value between these values
-    //      The better position the bigger the value
-    //Evaluation might also depend on
-    //      How many steps it took to win
-    //      How close the opponent was to winning
-    //      The better organized this function the better the results
-
-    public Tile AIMove(Tile opponentMove) {
+    public Tile AIMove(Tile opponentMove, Player otherPlayer) {
         if (this.tree == null) {
-            evaluation();
+            evaluation(otherPlayer);
         }
+
+        for (Node child : currentTurn.getChildren()) {
+            if (child.getCoords()[0] == opponentMove.getX() &&
+                    child.getCoords()[1] == opponentMove.getY()) {
+                for (Node grandchild : child.getChildren()) {
+                    if (grandchild.getValue() == child.getValue()) {
+                        currentTurn = grandchild;
+                    }
+                }
+                break;
+            }
+        }
+
         int[] coords = currentTurn.getCoords();
-        Tile tile = new Tile(getColor(), coords[0], coords[1]);
-        // set last tile placed
-        //update tree;
+        lastTilePlaced = new Tile(getColor(), coords[0], coords[1]);
 
+        return lastTilePlaced;
+    }
 
-        return null;
-
+    public static void main(String[] args) {
     }
 }
-

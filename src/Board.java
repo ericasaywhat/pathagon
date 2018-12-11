@@ -72,6 +72,70 @@ public class Board {
         return -1;
     }
 
+    public int findLongestPath() {
+        int longestBlackPath = 0;
+
+        for (int i = 0; i < 7; i++) {
+            int blackPath = checkTileForPath(board[i][0], new ArrayList<Tile>(), -6, 6, 1, 0);
+            if (blackPath > longestBlackPath) {
+                longestBlackPath = blackPath;
+            }
+        }
+        return longestBlackPath;
+    }
+
+    public int checkTileForPath(Tile tile, ArrayList<Tile> visited, int goalX, int goalY, int color, int longestPathSoFar) {
+        int new_longestPathSoFar = 0;
+
+        if (tile == null) {
+            return longestPathSoFar;
+        } else {
+            if (tile.getX() == goalX || tile.getY() == goalY) {
+                return longestPathSoFar;
+            }
+
+            visited.add(tile);
+
+            if (tile.getLeftNeighbor() != null
+                    && !visited.contains(tile.getLeftNeighbor())
+                    && tile.getLeftNeighbor().getColor() == color) {
+                int result = checkTileForPath(tile.getLeftNeighbor(), visited, goalX, goalY, color, longestPathSoFar++);
+                if (result > new_longestPathSoFar) {
+                    new_longestPathSoFar = result;
+                }
+            }
+
+            if (tile.getRightNeighbor() != null
+                    && !visited.contains(tile.getRightNeighbor())
+                    && tile.getRightNeighbor().getColor() == color) {
+                int result = checkTileForPath(tile.getRightNeighbor(), visited, goalX, goalY, color, longestPathSoFar++);
+                if (result > new_longestPathSoFar) {
+                    new_longestPathSoFar = result;
+                }
+            }
+
+            if (tile.getTopNeighbor() != null
+                    && !visited.contains(tile.getTopNeighbor())
+                    && tile.getTopNeighbor().getColor() == color) {
+                int result = checkTileForPath(tile.getTopNeighbor(), visited, goalX, goalY, color, longestPathSoFar++);
+                if (result > new_longestPathSoFar) {
+                    new_longestPathSoFar = result;
+                }
+            }
+
+            if (tile.getBottomNeighbor() != null
+                    && !visited.contains(tile.getBottomNeighbor())
+                    && tile.getBottomNeighbor().getColor() == color) {
+                int result = checkTileForPath(tile.getBottomNeighbor(), visited, goalX, goalY, color, longestPathSoFar++);
+                if (result > new_longestPathSoFar) {
+                    new_longestPathSoFar = result;
+                }
+            }
+
+            return new_longestPathSoFar;
+        }
+    }
+
     public boolean checkTileForPath(Tile tile, ArrayList<Tile> visited, int goalX, int goalY, int color) {
         boolean flag;
 
@@ -150,6 +214,53 @@ public class Board {
         } else {
             System.out.println("Great! These are valid coordinates.");
             return true;
+        }
+    }
+
+    /*
+     * This function checks the last move to see if it has trapped any
+     * of the other player's pieces. If there is a trap, the tile is
+     * removed from the board and the other player's number of
+     * remaining tiles is incremented.
+     *
+     * The following conditions qualify for a trap:
+     *      - there must be a neighbor of opposite colour
+     *      - there must be a neighbor two blocks down of
+     *        the same colour
+     * */
+    public void checkForTrap(Tile tile, Player otherPlayer) {
+        int x = tile.getX();
+        int y = tile.getY();
+        int colour = tile.getColor();
+        Tile[][] gameBoard = board;
+
+        if (y+1 < 7 && gameBoard[x][y+1] != null && (gameBoard[x][y+1].getColor() != colour)) {
+            if (gameBoard[x][y+2] != null && (gameBoard[x][y+2].getColor() == colour)) {
+                otherPlayer.addForbiddenTile(gameBoard[x][y+1]);
+                removeTile(gameBoard[x][y+1]);
+                otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
+            }
+        }
+        if (y-1 >= 0 && gameBoard[x][y-1] != null && gameBoard[x][y-1].getColor() != colour) {
+            if (gameBoard[x][y-2] != null && (gameBoard[x][y-2].getColor() == colour)) {
+                otherPlayer.addForbiddenTile(gameBoard[x][y-1]);
+                removeTile(gameBoard[x][y-1]);
+                otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
+            }
+        }
+        if (x+1 < 7 && gameBoard[x+1][y] != null && gameBoard[x+1][y].getColor() != colour) {
+            if (gameBoard[x+2][y] != null && (gameBoard[x+2][y].getColor() == colour)) {
+                otherPlayer.addForbiddenTile(gameBoard[x+1][y]);
+                removeTile(gameBoard[x+1][y]);
+                otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
+            }
+        }
+        if (x-1 >= 0 && gameBoard[x-1][y] != null && gameBoard[x-1][y].getColor() != colour) {
+            if (gameBoard[x-2][y] != null && (gameBoard[x-2][y].getColor() == colour)) {
+                otherPlayer.addForbiddenTile(gameBoard[x-1][y]);
+                removeTile(gameBoard[x-1][y]);
+                otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
+            }
         }
     }
 
