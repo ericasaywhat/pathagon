@@ -1,7 +1,7 @@
 public class Game {
     private Board board;
     private Player player1;
-    private Player player2;
+    private AIPlayer player2;
     private Player currentPlayer;
     private Player otherPlayer;
     private int numberOfTurns;
@@ -23,7 +23,7 @@ public class Game {
     public Game() {
         board = new Board();
         player1 = new Player(0);
-        player2 = new Player(1);
+        player2 = new AIPlayer();
         currentPlayer = player1;
         otherPlayer = player2;
         isGameOver = false;
@@ -32,7 +32,12 @@ public class Game {
     public void play() {
         while (!isGameOver) {
             // if ai then pass in gameboard
-            Tile tile = currentPlayer.makeMove(board, currentPlayer.getColor());
+            Tile tile;
+            if (currentPlayer.equals(player2)) {
+                tile = player2.makeMove(board.getLastPlayerTilePlaced(), player1);
+            } else {
+                tile = currentPlayer.makeMove(board, currentPlayer.getColor());
+            }
             board.placeTile(tile);
             checkForTrap(tile);
             System.out.println(board.toString());

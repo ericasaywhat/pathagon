@@ -38,6 +38,7 @@ public class Board {
             board[tile.getX()][tile.getY()-1].setTopNeighbor(tile);
             tile.setBottomNeighbor(board[tile.getX()][tile.getY()-1]);
         }
+        setLastPlayerTilePlaced(tile);
     }
 
     public void removeTile(Tile tile) {
@@ -235,28 +236,28 @@ public class Board {
         Tile[][] gameBoard = board;
 
         if (y+1 < 7 && gameBoard[x][y+1] != null && (gameBoard[x][y+1].getColor() != colour)) {
-            if (gameBoard[x][y+2] != null && (gameBoard[x][y+2].getColor() == colour)) {
+            if (y+2 < 7 && gameBoard[x][y+2] != null && (gameBoard[x][y+2].getColor() == colour)) {
                 otherPlayer.addForbiddenTile(gameBoard[x][y+1]);
                 removeTile(gameBoard[x][y+1]);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
         if (y-1 >= 0 && gameBoard[x][y-1] != null && gameBoard[x][y-1].getColor() != colour) {
-            if (gameBoard[x][y-2] != null && (gameBoard[x][y-2].getColor() == colour)) {
+            if (y-2 >= 0 && gameBoard[x][y-2] != null && (gameBoard[x][y-2].getColor() == colour)) {
                 otherPlayer.addForbiddenTile(gameBoard[x][y-1]);
                 removeTile(gameBoard[x][y-1]);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
         if (x+1 < 7 && gameBoard[x+1][y] != null && gameBoard[x+1][y].getColor() != colour) {
-            if (gameBoard[x+2][y] != null && (gameBoard[x+2][y].getColor() == colour)) {
+            if (x+2 < 7 && gameBoard[x+2][y] != null && (gameBoard[x+2][y].getColor() == colour)) {
                 otherPlayer.addForbiddenTile(gameBoard[x+1][y]);
                 removeTile(gameBoard[x+1][y]);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);
             }
         }
         if (x-1 >= 0 && gameBoard[x-1][y] != null && gameBoard[x-1][y].getColor() != colour) {
-            if (gameBoard[x-2][y] != null && (gameBoard[x-2][y].getColor() == colour)) {
+            if (x-2 >= 0 && gameBoard[x-2][y] != null && (gameBoard[x-2][y].getColor() == colour)) {
                 otherPlayer.addForbiddenTile(gameBoard[x-1][y]);
                 removeTile(gameBoard[x-1][y]);
                 otherPlayer.setTilesRemaining(otherPlayer.getTilesRemaining()+1);

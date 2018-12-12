@@ -31,7 +31,6 @@ public class AIPlayer extends Player {
         }
     }
 
-
     /*
      *  This is a function that returns all the next steps
      *  of the other player based on the last tile the player
@@ -65,6 +64,8 @@ public class AIPlayer extends Player {
             nextTier.add(new Node(aiMove, aiMove.getDepth() + 1,
                     new int[]{x - 1, y}, false));
         }
+
+        System.out.println(board);
 
         return nextTier;
     }
@@ -114,7 +115,6 @@ public class AIPlayer extends Player {
         } else {
             int value = board.findLongestPath();
             node.setValue(value);
-
         }
 
         node.setChildren(nextPlayerTier(board, node));
@@ -143,23 +143,23 @@ public class AIPlayer extends Player {
         return node;
     }
 
-    private void evaluation(Player otherPlayer) {
+    private void generateTree(Player otherPlayer, Tile opponentMove) {
         //TODO accomodate for player going first
         currentTurn = new Node(null, 0, null, true);
         currentTurn.setValue(0);
         for (int y = 0; y < 7; y++) {
-            Node root = evaluationHelper(new Board(), new Node(null, 0, new int[]{0, y}, true), otherPlayer); // generate a new board for each starter
+            Board newBoard = new Board();
+            newBoard.placeTile(opponentMove);
+            Node root = evaluationHelper(newBoard, new Node(null, 0, new int[]{0, y}, true), otherPlayer); // generate a new board for each starter
             if (root.getValue() > currentTurn.getValue()) {
-                currentTurn = root;
-                tree = root;
+                this.currentTurn = root;
+                this.tree = root;
             }
         }
     }
 
-    public Tile AIMove(Tile opponentMove, Player otherPlayer) {
-        if (this.tree == null) {
-            evaluation(otherPlayer);
-        }
+    public Tile makeMove(Tile opponentMove, Player otherPlayer) {
+        generateTree(otherPlayer, opponentMove);
 
         for (Node child : currentTurn.getChildren()) {
             if (child.getCoords()[0] == opponentMove.getX() &&
