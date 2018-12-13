@@ -10,6 +10,13 @@ public class AIPlayer extends Player {
         super(1);
     }
 
+    /*
+     * printTree is a function that takes a node
+     * and uses printGivenLevel as a helper function
+     * that recurses within itself to iterate through
+     * and print all the node's children and descendants
+     *
+     * */
     public void printTree(Node node) {
         int h = node.getDepth();
         int i;
@@ -31,9 +38,8 @@ public class AIPlayer extends Player {
         }
     }
 
-
     /*
-     *  This is a function that returns all the next steps
+     *  nextPlayerTier is a function that returns all the next steps
      *  of the other player based on the last tile the player
      *  placed and currently assumes that the pieces have to
      *  be touching.
@@ -69,6 +75,13 @@ public class AIPlayer extends Player {
         return nextTier;
     }
 
+    /*
+     *  nextAITier is a function that returns all the next steps
+     *  of the other player based on the last tile the player
+     *  placed and currently assumes that the pieces have to
+     *  be touching.
+     *
+     * */
     private ArrayList<Node> nextAITier(Board board, Node aiMove, Node playerMove) {
         int x = aiMove.getCoords()[0];
         int y = aiMove.getCoords()[1];
