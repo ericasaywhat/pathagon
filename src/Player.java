@@ -6,7 +6,7 @@ public class Player {
     private boolean isMyTurn;
     private int tilesRemaining;
     private int color;
-    ArrayList<Tile> forbiddenTiles;
+    ArrayList<Tile> forbiddenTiles; // players cannot replace a tile that was just trapped
 
     public Player(int color) {
         isMyTurn = false;

@@ -94,6 +94,11 @@ public class Game {
         }
     }
 
+    /*
+     * This function checks the if the game is over by
+     * checking if a path has been made
+     *
+     * */
     public boolean checkIsGameOver() {
         int result = board.isPathMade();
         if (result != -1) {

@@ -1,5 +1,16 @@
 import java.util.ArrayList;
 
+/*
+* This class contains all the algorithms for the AI implementation.
+*
+* Currently the algorithm implemented is Minimax. Alpha-Beta pruning
+* will be the next step of the implementation and should only be an
+* addition of two variables into the evaluation function, the alpha
+* and the beta as well as some comparisons so that we don't have to
+* generate any branches that we know is a worse choice.
+*
+* */
+
 public class AIPlayer extends Player {
     private Node tree;
     private Node currentTurn;
@@ -79,7 +90,8 @@ public class AIPlayer extends Player {
 
     /*
      *  nextAITier is a function that returns all the next steps
-     *  of the other player based on the last tile the player
+     *  of the AI for each of its possible turns
+     *  based on the last tile the player
      *  placed and currently assumes that the pieces have to
      *  be touching.
      *
@@ -112,6 +124,25 @@ public class AIPlayer extends Player {
 
         return nextTier;
     }
+
+    /*
+     * The following function is the evaluation function that we use
+     * to evaluate each move. This function currently is an offensive
+     * strategy and only looks at whether or not a path can be made.
+     *
+     * If the AI can make a path, then the node is set to a value of 10000.
+     * Otherwise if the other player can make a path then the node is set
+     * to a value of -10000
+     *
+     * Next steps for this function is to add alpha and beta variables that
+     * will be taken as inputs and passed through recursively up the game tree.
+     * The value must lie between alpha and beta in order to be a possible
+     * branch. If not, the function should not bother generating that branch.
+     *
+     * Further steps for this function could be to weigh success differently,
+     * having better moves or worse moves, rather than just a binary good move (10000)
+     * and bad move (-100000).
+     * */
 
     private Node evaluationHelper(Board board, Node node, Player otherPlayer) {
         if (this.getTilesRemaining() == 0 || board.isPathMade() != -1) {
@@ -171,6 +202,16 @@ public class AIPlayer extends Player {
             }
         }
     }
+
+    /*
+    * The following function returns a tile that is the AI's move.
+    *
+    * It takes in the opponent's move and finds the node in the children
+    * of its last turn and then finds the best move which should have the
+    * same value as the parent node since the values are passed up in
+    * tree generation and returns that move as the AI's move.
+    *
+    * */
 
     public Tile makeMove(Tile opponentMove, Player otherPlayer) {
         generateTree(otherPlayer, opponentMove);

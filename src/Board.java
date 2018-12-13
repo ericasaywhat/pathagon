@@ -1,5 +1,26 @@
 import java.util.ArrayList;
 
+/*
+*  This class contains the actual game baord (represented in
+*  a 2D array of Tiles.
+*
+*  Other than getters and setters, there are functions that
+*  place and remove tiles from the board.
+*
+*  Functions of note include:
+*       - checkTileForPath: (there are two: one for the game and one
+*         for AI logic; future steps include condensing these two into
+*         one function) this function takes in a tile and recursively
+*         checks the tile and its neighbors for a path made
+*       - areValidCoordinates: this function checks to see if the
+*         coordinates inputted are contained in the list of a player's
+*         forbidden tiles or if the coordinates are off the board or null
+*       - checkForTrap: this function takes checks if the tile placed has
+*         trapped any of the other player's tiles that are already on the
+*         board. (more details below)
+*
+* */
+
 public class Board {
     private Tile[][] board;
     private Tile lastPlayerTilePlaced;
@@ -222,7 +243,9 @@ public class Board {
      * This function checks the last move to see if it has trapped any
      * of the other player's pieces. If there is a trap, the tile is
      * removed from the board and the other player's number of
-     * remaining tiles is incremented.
+     * remaining tiles is incremented. The player also cannot put a tile
+     * at that coordinate in the next move.
+     *
      *
      * The following conditions qualify for a trap:
      *      - there must be a neighbor of opposite colour
